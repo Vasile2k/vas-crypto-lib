@@ -78,7 +78,9 @@ class RC6EncryptionAlgorithm extends EncryptionAlgorithm {
         if(this.getKeySizes().indexOf(key.length * 8) === -1){
             throw new Error("Invalid key size!");
         }
-        let L = new Uint32Array(key.buffer);
+        // Copy key to prevent fucking it
+        let keyCopy = new Uint8Array(key);
+        let L = new Uint32Array(keyCopy.buffer);
         let c = L.length;
         let r = this.getRounds();
         let P32 = 0xB7E15163;
@@ -121,24 +123,25 @@ class RC6EncryptionAlgorithm extends EncryptionAlgorithm {
         let C = ABCD[2];
         let D = ABCD[3];
 
-        let int32 = n => n & 0xFFFFFFFF;
+        // let int32 = n => n & 0xFFFFFFFF;
+        let int32 = (n: bigint) => Number(n % BigInt(0x100000000));
 
-        B = int32(B + S[0]);
-        D = int32(D + S[1]);
+        B = int32(BigInt(B + S[0]));
+        D = int32(BigInt(D + S[1]));
 
-        for(let i = 0; i < this.rounds; ++i){
+        for(let i = 1; i <= this.rounds; ++i){
             let lgw = 5; // log2 of word size in bits(32)
-            let t = rotateLeftInt32(int32(B * (2*B + 1)), lgw);
-            let u = rotateLeftInt32(int32(D * (2*D + 1)), lgw);
+            let t = rotateLeftInt32(int32(BigInt(B) * BigInt(2*B + 1)), lgw);
+            let u = rotateLeftInt32(int32(BigInt(D) * BigInt(2*D + 1)), lgw);
 
-            A = int32(rotateLeftInt32(A ^ t, u) + S[2*i]);
-            C = int32(rotateLeftInt32(C ^ u, t) + S[2*i + 1]);
+            A = int32(BigInt(rotateLeftInt32(A ^ t, u)) + BigInt(S[2*i]));
+            C = int32(BigInt(rotateLeftInt32(C ^ u, t)) + BigInt(S[2*i + 1]));
 
             [A, B, C, D] = [B, C, D, A];
         }
 
-        A = int32(A + S[2*this.rounds + 2]);
-        C = int32(C + S[2*this.rounds + 3]);
+        A = int32(BigInt(A) + BigInt(S[2*this.rounds + 2]));
+        C = int32(BigInt(C) + BigInt(S[2*this.rounds + 3]));
 
         let result = new Uint32Array(4);
         result[0] = A;
@@ -160,25 +163,25 @@ class RC6EncryptionAlgorithm extends EncryptionAlgorithm {
         let C = ABCD[2];
         let D = ABCD[3];
 
-        let int32 = n => n & 0xFFFFFFFF;
+        let int32 = (n: bigint) => Number(n % BigInt(0x100000000));
 
 
-        C = int32(C - S[2*this.rounds + 3]);
-        A = int32(A - S[2*this.rounds + 2]);
+        C = int32(BigInt(C - S[2*this.rounds + 3]));
+        A = int32(BigInt(A - S[2*this.rounds + 2]));
 
-        for(let i = this.rounds - 1; i >= 0; --i){
+        for(let i = this.rounds; i > 0; --i){
             [A, B, C, D] = [D, A, B, C];
             let lgw = 5; // log2 of word size in bits(32)
 
-            let u = rotateLeftInt32(int32(D * (2*D + 1)), lgw);
-            let t = rotateLeftInt32(int32(B * (2*B + 1)), lgw);
+            let u = rotateLeftInt32(int32(BigInt(D) * BigInt(2*D + 1)), lgw);
+            let t = rotateLeftInt32(int32(BigInt(B) * BigInt(2*B + 1)), lgw);
 
-            C = rotateRightInt32(int32(C - S[2*i + 1]), t) ^ u;
-            A = rotateRightInt32(int32(A - S[2*i]), u) ^ t;
+            C = rotateRightInt32(int32(BigInt(C - S[2*i + 1])), t) ^ u;
+            A = rotateRightInt32(int32(BigInt(A - S[2*i])), u) ^ t;
         }
 
-        D = int32(D - S[1]);
-        B = int32(B - S[0]);
+        D = int32(BigInt(D - S[1]));
+        B = int32(BigInt(B - S[0]));
 
         let result = new Uint32Array(4);
         result[0] = A;

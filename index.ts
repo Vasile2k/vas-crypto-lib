@@ -185,23 +185,26 @@ let textEncoder = new TextEncoder();
 let textDecoder = new TextDecoder();
 let text = "uaieuaieuaieuaie";
 let key = "uaieuaieuaieuaie";
+// let text = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+// let key = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
 
 let result = rc6EncryptBlock(textEncoder.encode(text), textEncoder.encode(key));
 
 let enc = new RC6EncryptionAlgorithm();
-enc.setRounds(16);
 
 let result2 = enc.encryptBlock(textEncoder.encode(text), textEncoder.encode(key));
 
+let dec = enc.decryptBlock(result2, textEncoder.encode(key));
+
 console.log(result);
 console.log(result2);
-console.log(textDecoder.decode(enc.decryptBlock(result2, textEncoder.encode(key))));
+console.log(textDecoder.decode(dec));
 
-/*let resultString = "";
-result.forEach(k => resultString += k.toString(16) + " ");
+let resultString = "";
+result2.forEach(k => resultString += k.toString(16) + " ");
 console.log(resultString);
 
-let decrypted = rc6DecryptBlock(result, textEncoder.encode(key));
+/*let decrypted = rc6DecryptBlock(result, textEncoder.encode(key));
 
 console.log(result);
 console.log(Buffer.from(String.fromCharCode.apply(null, result)).toString("base64"));
