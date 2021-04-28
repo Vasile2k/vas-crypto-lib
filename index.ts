@@ -1,6 +1,8 @@
 import { Buffer } from "buffer";
 import { readFileSync } from "fs";
 
+import { RC6EncryptionAlgorithm } from "./encryption";
+
 const BLOCK_SIZES = [128];
 const KEY_SIZES = [128, 192, 256];
 const ROUNDS = 20;
@@ -186,7 +188,16 @@ let key = "uaieuaieuaieuaie";
 
 let result = rc6EncryptBlock(textEncoder.encode(text), textEncoder.encode(key));
 
-let resultString = "";
+let enc = new RC6EncryptionAlgorithm();
+enc.setRounds(16);
+
+let result2 = enc.encryptBlock(textEncoder.encode(text), textEncoder.encode(key));
+
+console.log(result);
+console.log(result2);
+console.log(textDecoder.decode(enc.decryptBlock(result2, textEncoder.encode(key))));
+
+/*let resultString = "";
 result.forEach(k => resultString += k.toString(16) + " ");
 console.log(resultString);
 
@@ -195,7 +206,7 @@ let decrypted = rc6DecryptBlock(result, textEncoder.encode(key));
 console.log(result);
 console.log(Buffer.from(String.fromCharCode.apply(null, result)).toString("base64"));
 
-console.log(textDecoder.decode(decrypted));
+console.log(textDecoder.decode(decrypted))
 
 
 let fileBytes = readFileSync("./text.txt");
@@ -205,4 +216,4 @@ let decryptedFile = rc6DecryptBlob(encryptedFile, textEncoder.encode(key));
 
 console.log(textDecoder.decode(fileBytes));
 console.log(textDecoder.decode(encryptedFile));
-console.log(textDecoder.decode(decryptedFile));
+console.log(textDecoder.decode(decryptedFile));*/
