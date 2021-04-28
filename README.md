@@ -18,7 +18,7 @@ Via `npm`:
 
 ## Usage
 ```ts
-import { RC6EncryptionAlgorithm } from "./encryption";
+import { RC6EncryptionAlgorithm } from "vas-crypto-lib";
 
 let textEncoder = new TextEncoder();
 let textDecoder = new TextDecoder();

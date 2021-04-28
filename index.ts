@@ -1,6 +1,11 @@
-import { RC6EncryptionAlgorithm } from "./encryption";
+import { EncryptionAlgorithm, RC6EncryptionAlgorithm } from "./encryption";
 
-function rc6EncryptBlob(input: Uint8Array, key: Uint8Array): Uint8Array{
+export {
+    EncryptionAlgorithm,
+    RC6EncryptionAlgorithm
+};
+
+/*function rc6EncryptBlob(input: Uint8Array, key: Uint8Array): Uint8Array{
     let rc6 = new RC6EncryptionAlgorithm();
     let chunks = [];
     let blockSize = rc6.getBlockSizes()[0] / 8;
@@ -64,7 +69,7 @@ console.log(textDecoder.decode(dec));
 
 let resultString = "";
 result.forEach(k => resultString += k.toString(16) + " ");
-console.log(resultString);
+console.log(resultString);*/
 
 /*
 let fileBytes = readFileSync("./text.txt");
