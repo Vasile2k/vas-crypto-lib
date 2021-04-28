@@ -1,8 +1,8 @@
-import { strict as assert } from 'assert';
+import { strict as assert } from "assert";
 
 describe("vas-crypto-lib", () => {
 
-    it("should encrypt blocks", () => {
+    it("should pass this test", () => {
         assert(true);
     });
 
