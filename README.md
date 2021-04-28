@@ -19,11 +19,11 @@ let textDecoder = new TextDecoder();
 let text = "uaieuaieuaieuaie";
 let key = "uaieuaieuaieuaie";
 
-let enc = new RC6EncryptionAlgorithm();
+let rc6 = new RC6EncryptionAlgorithm();
 
-let result = enc.encryptBlock(textEncoder.encode(text), textEncoder.encode(key));
+let result = rc6.encryptBlock(textEncoder.encode(text), textEncoder.encode(key));
 
-let dec = enc.decryptBlock(result, textEncoder.encode(key));
+let dec = rc6.decryptBlock(result, textEncoder.encode(key));
 
 console.log(result);
 console.log(textDecoder.decode(dec));
