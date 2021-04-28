@@ -6,9 +6,15 @@ This library supports the following symmetric encryption algorithms:
 * RC6
 * more to come...
 
-This library supports the following cipher modes of operation:
+This library supports the following block cipher modes of operation:
 * ECB
 * more to come...
+
+## Installation
+Via `npm`:
+```
+> npm install vas-crypto-lib
+```
 
 ## Usage
 ```ts
