@@ -4,7 +4,7 @@
   "description": "Small JS library for crypto",
   "main": "index.ts",
   "scripts": {
-    "test": "node test.ts"
+    "test": "mocha --require ts-node/register test/*.ts"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,14 @@
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/Vasile2k/vas-crypto-lib/issues"
+  },
+  "dependencies": {
+    "typescript": "^4.2.4",
+    "ts-node": "^9.1.1",
+    "tslint": "^6.1.3",
+    "mocha": "~8.3.2",
+    "@types/node": "^15.0.1",
+    "@types/jest": "^26.0.23"
   },
   "homepage": "https://github.com/Vasile2k/vas-crypto-lib#readme"
 }
