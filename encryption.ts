@@ -124,6 +124,11 @@ class RC6EncryptionAlgorithm extends EncryptionAlgorithm {
         let D = ABCD[3];
 
         // let int32 = n => n & 0xFFFFFFFF;
+        // Use BigInt everywhere because some weird bullshit happens otherwise
+        // Javascript's big number are double or float or some fucking kind of
+        // shit which is approximate and not exact... and this fucks the entire
+        // algorithm, so that's why I have to use big int
+        // my dick...
         let int32 = (n: bigint) => Number(n % BigInt(0x100000000));
 
         B = int32(BigInt(B + S[0]));
@@ -131,6 +136,11 @@ class RC6EncryptionAlgorithm extends EncryptionAlgorithm {
 
         for(let i = 1; i <= this.rounds; ++i){
             let lgw = 5; // log2 of word size in bits(32)
+            // That's a multiplication of 2 very big numbers
+            // Overflows from 32-bit and JS automatically converts it to double
+            // Double my dick
+            // By using BigInt the multiplication is correct and I can do that
+            //     because I chop first few bits anyway
             let t = rotateLeftInt32(int32(BigInt(B) * BigInt(2*B + 1)), lgw);
             let u = rotateLeftInt32(int32(BigInt(D) * BigInt(2*D + 1)), lgw);
 
@@ -163,8 +173,8 @@ class RC6EncryptionAlgorithm extends EncryptionAlgorithm {
         let C = ABCD[2];
         let D = ABCD[3];
 
+        // See #encryptBlock for detailed comments about BigInt
         let int32 = (n: bigint) => Number(n % BigInt(0x100000000));
-
 
         C = int32(BigInt(C - S[2*this.rounds + 3]));
         A = int32(BigInt(A - S[2*this.rounds + 2]));
