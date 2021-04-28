@@ -1,0 +1,25 @@
+{
+  "name": "vas-crypto-lib",
+  "version": "1.0.0",
+  "description": "Small JS library for crypto",
+  "main": "index.ts",
+  "scripts": {
+    "test": "node test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vasile2k/vas-crypto-lib.git"
+  },
+  "keywords": [
+    "crypto",
+    "symmetric",
+    "library",
+    "cryptography"
+  ],
+  "author": "Vasile2kappa",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Vasile2k/vas-crypto-lib/issues"
+  },
+  "homepage": "https://github.com/Vasile2k/vas-crypto-lib#readme"
+}
