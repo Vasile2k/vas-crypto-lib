@@ -8,7 +8,7 @@ This library supports the following symmetric encryption algorithms:
 
 This library supports the following block cipher modes of operation:
 * ECB
-* more to come...
+* CBC
 
 ## Installation
 Via `npm`:
@@ -18,21 +18,25 @@ Via `npm`:
 
 ## Usage
 ```ts
-import { RC6EncryptionAlgorithm, RC4EncryptionAlgorithm } from "vas-crypto-lib";
+import { ModeOfOperation, DataEncrypter, RC6EncryptionAlgorithm, RC4EncryptionAlgorithm } from "vas-crypto-lib";
 
 let textEncoder = new TextEncoder();
-let textDecoder = new TextDecoder();
-let text = "uaieuaieuaieuaie";
-let key = "uaieuaieuaieuaie";
 
-let rc6 = new RC6EncryptionAlgorithm();
+let blob = textEncoder.encode("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+let key = textEncoder.encode("super_secret_key");
 
-let result = rc6.encryptBlock(textEncoder.encode(text), textEncoder.encode(key));
+let enc = new DataEncrypter();
+enc.setModeOfOperation(ModeOfOperation.CBC);
+enc.setEncryptionAlgorithm(new RC6EncryptionAlgorithm());
+enc.setInitializationVector(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
 
-let dec = rc6.decryptBlock(result, textEncoder.encode(key));
+let encrypted = enc.encryptBlob(blob, key);
 
-console.log(result);
-console.log(textDecoder.decode(dec));
+// Do something with the encrypted data
+
+let decrypted = enc.decryptBlob(encrypted, key);
+
+// Do something with the decrypted data
 ```
 
 ## License
