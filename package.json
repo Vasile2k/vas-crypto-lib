@@ -2,7 +2,7 @@
   "name": "vas-crypto-lib",
   "version": "1.2.0",
   "description": "Small JS library for crypto",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "scripts": {
     "test": "mocha --require ts-node/register test/*.ts"
   },
