@@ -70,15 +70,15 @@ class DataEncrypter {
                 }
             }
             else if (this.modeOfOperation == ModeOfOperation.CBC) {
-                if (this.initializationVector == null || this.initializationVector.length !== blockSize) {
+                if (this.initializationVector == undefined || this.initializationVector.length !== blockSize) {
                     throw new Error("Initialization vector is of wrong size!");
                 }
-                let blocks = [];
-                blocks.push(this.enc.encryptBlock(helper_1.xor(chunks[0], this.initializationVector), key));
+                let encryptedBlocks = [];
+                encryptedBlocks.push(this.enc.encryptBlock(helper_1.xor(chunks[0], this.initializationVector), key));
                 for (let i = 1; i < chunks.length; ++i) {
-                    blocks.push(this.enc.encryptBlock(helper_1.xor(chunks[i], blocks[i - 1]), key));
+                    encryptedBlocks.push(this.enc.encryptBlock(helper_1.xor(chunks[i], encryptedBlocks[i - 1]), key));
                 }
-                for (let block of blocks) {
+                for (let block of encryptedBlocks) {
                     block.forEach(b => encrypted.push(b));
                 }
             }
@@ -117,15 +117,15 @@ class DataEncrypter {
                 }
             }
             else if (this.modeOfOperation == ModeOfOperation.CBC) {
-                if (this.initializationVector !== undefined && this.initializationVector.length != blockSize) {
+                if (this.initializationVector === undefined || this.initializationVector.length != blockSize) {
                     throw new Error("Initialization vector is of wrong size!");
                 }
-                let blocks = [];
-                blocks.push(helper_1.xor(this.enc.decryptBlock(chunks[0], key), this.initializationVector));
+                let decryptedBlocks = [];
+                decryptedBlocks.push(helper_1.xor(this.enc.decryptBlock(chunks[0], key), this.initializationVector));
                 for (let i = 1; i < chunks.length; ++i) {
-                    blocks.push(helper_1.xor(this.enc.decryptBlock(chunks[i], key), blocks[i - 1]));
+                    decryptedBlocks.push(helper_1.xor(this.enc.decryptBlock(chunks[i], key), chunks[i - 1]));
                 }
-                for (let block of blocks) {
+                for (let block of decryptedBlocks) {
                     block.forEach(b => decrypted.push(b));
                 }
             }

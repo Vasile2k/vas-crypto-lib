@@ -14,7 +14,7 @@ describe("rc4-encryption", () => {
         let encrypted = enc.encryptBlock(plainText, key);
         let decrypted = enc.decryptBlock(encrypted, key);
         assert_1.strict.equal(decrypted.length, plainText.length, "Decrypted length doesn't match plaintext length.");
-        decrypted.every((val, i) => {
+        decrypted.forEach((val, i) => {
             assert_1.strict.equal(val, plainText[i], "Decrypted doesn't match plaintext.");
         });
     });
@@ -51,12 +51,12 @@ describe("rc4-encryption", () => {
             let cipher = uint8ArrayFromHexStrng(testVector["ciphertext"]);
             let encrypted = enc.encryptBlock(text, key);
             assert_1.strict.equal(encrypted.length, cipher.length, "Ciphertext length mismatch.");
-            encrypted.every((val, i) => {
+            encrypted.forEach((val, i) => {
                 assert_1.strict.equal(val, cipher[i], "Ciphertext mismatch.");
             });
             let decrypted = enc.decryptBlock(encrypted, key);
             assert_1.strict.equal(decrypted.length, text.length, "Decrypted length doesn't match plaintext length.");
-            decrypted.every((val, i) => {
+            decrypted.forEach((val, i) => {
                 assert_1.strict.equal(val, text[i], "Decrypted doesn't match plaintext.");
             });
         });

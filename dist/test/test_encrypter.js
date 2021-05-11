@@ -14,7 +14,7 @@ describe("encrypter", () => {
         let encrypted = enc.encryptBlob(blob, key);
         let decrypted = enc.decryptBlob(encrypted, key);
         // length is not important since the blob will be padded
-        blob.every((val, i) => {
+        blob.forEach((val, i) => {
             assert_1.strict.equal(val, decrypted[i], "Decrypted doesn't match plaintext.");
         });
     });
@@ -29,7 +29,7 @@ describe("encrypter", () => {
         let encrypted = enc.encryptBlob(blob, key);
         let decrypted = enc.decryptBlob(encrypted, key);
         // length is not important since the blob will be padded
-        blob.every((val, i) => {
+        blob.forEach((val, i) => {
             assert_1.strict.equal(val, decrypted[i], "Decrypted doesn't match plaintext.");
         });
     });
