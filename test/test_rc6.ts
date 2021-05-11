@@ -22,7 +22,7 @@ describe("rc6-encryption", () => {
 
         assert.equal(decrypted.length, plainText.length, "Decrypted length doesn't match plaintext length.");
 
-        decrypted.every((val, i) => {
+        decrypted.forEach((val, i) => {
             assert.equal(val, plainText[i], "Decrypted doesn't match plaintext.");
         });
     });
@@ -78,14 +78,14 @@ describe("rc6-encryption", () => {
             let encrypted = enc.encryptBlock(text, key);
 
             assert.equal(encrypted.length, cipher.length, "Ciphertext length mismatch.");
-            encrypted.every((val, i) => {
+            encrypted.forEach((val, i) => {
                 assert.equal(val, cipher[i], "Ciphertext mismatch.");
             });
 
             let decrypted = enc.decryptBlock(encrypted, key);
 
             assert.equal(decrypted.length, text.length, "Decrypted length doesn't match plaintext length.");
-            decrypted.every((val, i) => {
+            decrypted.forEach((val, i) => {
                 assert.equal(val, text[i], "Decrypted doesn't match plaintext.");
             });
 
