@@ -10,15 +10,15 @@ abstract class EncryptionAlgorithm{
 
     /**
      * The possible sizes of blocks (in bits) of which algorithm can operate
-     * @returns an array containing all possible block sizes
+     * @returns an array containing all possible block sizes or a string with value "any"
      */
-    abstract getBlockSizes(): Array<number>;
+    abstract getBlockSizes(): Array<number> | string;
 
     /**
      * The possible key sizes (in bits)
-     * @returns an array containing all possible key sizes
+     * @returns an array containing all possible key sizes or a string with value "any"
      */
-    abstract getKeySizes(): Array<number>;
+    abstract getKeySizes(): Array<number> | string;
 
     /**
      * Encrypts a block with the provided key
@@ -203,6 +203,100 @@ class RC6EncryptionAlgorithm extends EncryptionAlgorithm {
     }
 }
 
+class RC4EncryptionAlgorithm extends EncryptionAlgorithm {
+
+    constructor() {
+        super();
+    }
+
+    getName(): string {
+        return "RC4";
+    }
+
+    getBlockSizes(): string {
+        return "any";
+    }
+
+    getKeySizes(): Array<number> {
+        let keySizes = [];
+        for(let keySize = 1; keySize <= 256; ++keySize){
+            keySizes.push(keySize);
+        }
+        return keySizes;
+    }
+
+    /**
+     * Checks if a given key size is valid, since there are a lot of possibilities and generating a list with all of them is inefficient
+     * @param keySize
+     */
+    isValidKeySize(keySize: number): boolean {
+        return keySize >= 1 && keySize <= 256;
+    }
+
+    /**
+     * RC4 key schedule
+     */
+    rc4KeySchedule(key: Uint8Array): Uint32Array{
+        if(!this.isValidKeySize(key.length)){
+            throw new Error("Invalid key size!");
+        }
+        if(key.length < 5 || key.length > 16){
+            // Not the best idea to use console in a module but who cares?
+            // console.warn("Key is of an unrecommended size");
+        }
+        // Initialization
+        let n = 8;
+        let s = new Uint32Array(1 << n);
+        for(let i = 0; i < 1 << n; ++i){
+            s[i] = i;
+        }
+        let j = 0;
+        // Scrambling
+        for(let i = 0; i < 1 << n; ++i){
+            j = (j + s[i] + key[i % key.length]) % (1 << n);
+            [s[i], s[j]] = [s[j], s[i]];
+            // let tmp = s[i];
+            // s[i] = s[j];
+            // s[j] = tmp;
+        }
+        return s;
+    }
+
+    rc4PseudoRandomKeystream(s: Uint32Array, length: number): Uint8Array {
+        // Initialization
+        let i = 0;
+        let j = 0;
+        let k = new Uint8Array(length);
+        let n = 8;
+        let mod = 1 << n;
+        let z = 0;
+        // Generation loop
+        while(z < length){
+            i = (i + 1) % mod;
+            j = (j + s[i]) % mod;
+            [s[i], s[j]] = [s[j], s[i]];
+            k[z++] = s[(s[i] + s[j]) % mod];
+        }
+        return k;
+    }
+
+    encryptBlock(input: Uint8Array, key: Uint8Array): Uint8Array {
+        let s = this.rc4KeySchedule(key);
+        let keystream = this.rc4PseudoRandomKeystream(s, input.length);
+        let encrypted = new Uint8Array(input.length);
+        for(let i = 0; i < input.length; ++i){
+            encrypted[i] = input[i] ^ keystream[i];
+        }
+        return encrypted;
+    }
+
+    decryptBlock(input: Uint8Array, key: Uint8Array): Uint8Array {
+        // since the encryption is just a xor, if we xor
+        // it again it should be decrypted
+        return this.encryptBlock(input, key);
+    }
+}
+
 export {
-    EncryptionAlgorithm, RC6EncryptionAlgorithm
+    EncryptionAlgorithm, RC6EncryptionAlgorithm, RC4EncryptionAlgorithm
 };

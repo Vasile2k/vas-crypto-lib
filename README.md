@@ -4,7 +4,7 @@ Small JS library for crypto
 ## Features
 This library supports the following symmetric encryption algorithms:
 * RC6
-* more to come...
+* RC4
 
 This library supports the following block cipher modes of operation:
 * ECB
@@ -18,7 +18,7 @@ Via `npm`:
 
 ## Usage
 ```ts
-import { RC6EncryptionAlgorithm } from "vas-crypto-lib";
+import { RC6EncryptionAlgorithm, RC4EncryptionAlgorithm } from "vas-crypto-lib";
 
 let textEncoder = new TextEncoder();
 let textDecoder = new TextDecoder();
