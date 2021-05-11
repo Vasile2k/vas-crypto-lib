@@ -1,32 +1,23 @@
-import { strict as assert } from "assert";
-
-import { RC6EncryptionAlgorithm } from "../encryption";
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const assert_1 = require("assert");
+const encryption_1 = require("../encryption");
 describe("rc6-encryption", () => {
-
     it("should pass this test", () => {
-        assert(true);
+        assert_1.strict(true);
     });
-
     it("should encrypt and decrypt the plaintext", () => {
         let textEncoder = new TextEncoder();
-
         let plainText = textEncoder.encode("uaiecalcazanuoae");
         let key = textEncoder.encode("tigaeebataeekkal");
-
-        let enc = new RC6EncryptionAlgorithm();
-
+        let enc = new encryption_1.RC6EncryptionAlgorithm();
         let encrypted = enc.encryptBlock(plainText, key);
-
         let decrypted = enc.decryptBlock(encrypted, key);
-
-        assert.equal(decrypted.length, plainText.length, "Decrypted length doesn't match plaintext length.");
-
+        assert_1.strict.equal(decrypted.length, plainText.length, "Decrypted length doesn't match plaintext length.");
         decrypted.every((val, i) => {
-            assert.equal(val, plainText[i], "Decrypted doesn't match plaintext.");
+            assert_1.strict.equal(val, plainText[i], "Decrypted doesn't match plaintext.");
         });
     });
-
     it("should match test vectors", () => {
         let testVectors = [
             {
@@ -60,38 +51,30 @@ describe("rc6-encryption", () => {
                 "ciphertext": "C8 24 18 16 F0 D7 E4 89 20 AD 16 A1 67 4E 5D 48"
             }
         ];
-
         testVectors.forEach(testVector => {
-            let uint8ArrayFromHexStrng = (str: string) => {
-                let arr: number[] = [];
+            let uint8ArrayFromHexStrng = (str) => {
+                let arr = [];
                 str.split(" ").forEach(val => {
                     arr.push(parseInt(val, 16));
                 });
                 return new Uint8Array(arr);
             };
-
-            let enc = new RC6EncryptionAlgorithm();
+            let enc = new encryption_1.RC6EncryptionAlgorithm();
             let text = uint8ArrayFromHexStrng(testVector["plaintext"]);
             let key = uint8ArrayFromHexStrng(testVector["key"]);
             let cipher = uint8ArrayFromHexStrng(testVector["ciphertext"]);
-
             let encrypted = enc.encryptBlock(text, key);
-
-            assert.equal(encrypted.length, cipher.length, "Ciphertext length mismatch.");
+            assert_1.strict.equal(encrypted.length, cipher.length, "Ciphertext length mismatch.");
             encrypted.every((val, i) => {
-                assert.equal(val, cipher[i], "Ciphertext mismatch.");
+                assert_1.strict.equal(val, cipher[i], "Ciphertext mismatch.");
             });
-
             let decrypted = enc.decryptBlock(encrypted, key);
-
-            assert.equal(decrypted.length, text.length, "Decrypted length doesn't match plaintext length.");
+            assert_1.strict.equal(decrypted.length, text.length, "Decrypted length doesn't match plaintext length.");
             decrypted.every((val, i) => {
-                assert.equal(val, text[i], "Decrypted doesn't match plaintext.");
+                assert_1.strict.equal(val, text[i], "Decrypted doesn't match plaintext.");
             });
-
         });
-
-        assert(true);
+        assert_1.strict(true);
     });
-
 });
+//# sourceMappingURL=test_rc6.js.map
