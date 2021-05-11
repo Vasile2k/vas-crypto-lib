@@ -2,7 +2,7 @@ import { strict as assert } from "assert";
 
 import { RC6EncryptionAlgorithm } from "../encryption";
 
-describe("vas-crypto-lib", () => {
+describe("rc6-encryption", () => {
 
     it("should pass this test", () => {
         assert(true);
