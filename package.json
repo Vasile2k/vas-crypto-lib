@@ -1,6 +1,6 @@
 {
   "name": "vas-crypto-lib",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Small JS library for crypto",
   "main": "dist/index.js",
   "scripts": {
